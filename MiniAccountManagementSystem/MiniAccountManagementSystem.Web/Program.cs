@@ -31,11 +31,34 @@ try
         .ReadFrom.Configuration(context.Configuration));
     #endregion
 
-    builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-        .AddEntityFrameworkStores<ApplicationDbContext>();
+    #region Identity Configuration
+    builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+    {
+        options.SignIn.RequireConfirmedAccount = false;
+        options.Password.RequireDigit = true;
+        options.Password.RequiredLength = 8;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = true;
+        options.Password.RequireLowercase = true;
+    }).AddEntityFrameworkStores<ApplicationDbContext>()
+      .AddDefaultTokenProviders();
+    #endregion
     builder.Services.AddRazorPages();
 
     var app = builder.Build();
+
+    using(var scope = app.Services.CreateScope())
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        // Ensure the database is created and apply migrations
+        await dbContext.Database.MigrateAsync();
+        //seed database 
+        var seviceProvider = scope.ServiceProvider;
+        await DbInitializer.Initialize(seviceProvider);
+        Log.Information("Database migration completed successfully.");
+        
+    }
+
 
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())

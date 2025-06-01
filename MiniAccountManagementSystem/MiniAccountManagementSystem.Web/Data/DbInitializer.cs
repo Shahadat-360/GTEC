@@ -30,7 +30,7 @@ namespace MiniAccountManagementSystem.Web.Data
                     await userManager.AddToRoleAsync(adminUser, "Admin");
                 }
             }
-
+            await SeedModules(serviceProvider);
         }
 
         public static async Task SeedModules(IServiceProvider serviceProvider)
@@ -42,10 +42,11 @@ namespace MiniAccountManagementSystem.Web.Data
             await connection.OpenAsync();
             var modules = new[] { "ChartOfAccounts", "Vouchers", "Reports" };
             foreach (var module in modules) {
-                var command = new SqlCommand("IF NOT EXISTS (SELECT * FROM Modules WHERE Name = @Name) INSERT INTO Modules (Name) VALUES (@Name)", connection);
+                var command = new SqlCommand("IF NOT EXISTS (SELECT * FROM Modules WHERE ModuleName = @Name) INSERT INTO Modules (ModuleName) VALUES (@Name)", connection);
                 command.Parameters.AddWithValue("@Name", module);
                 await command.ExecuteNonQueryAsync();
             }
+            await connection.CloseAsync();
         }
     }
 
