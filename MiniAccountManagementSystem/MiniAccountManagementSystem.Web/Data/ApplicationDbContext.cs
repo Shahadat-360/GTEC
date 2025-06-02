@@ -22,6 +22,12 @@ namespace MiniAccountManagementSystem.Web.Data
                     entity.HasIndex(m => m.ModuleName).IsUnique();
                 });
 
+            builder.Entity<RoleModule>(
+                entity =>
+                {
+                    entity.ToTable("RoleModules");
+                });
+
             builder.Entity<RoleModule>()
             .HasIndex(rm => new { rm.RoleId, rm.ModuleId })
             .IsUnique();

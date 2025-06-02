@@ -20,6 +20,7 @@ namespace MiniAccountManagementSystem.Web.Entities
 
         [ForeignKey("ModuleId")]
         public Module Module { get; set; }
+        public DateTime AssignedDate { get; set; } = DateTime.UtcNow;
     }
 
 }

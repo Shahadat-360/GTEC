@@ -10,7 +10,6 @@ namespace MiniAccountManagementSystem.Web.Entities
         [Required]
         [MaxLength(100)]
         public string ModuleName { get; set; }
-
         public ICollection<RoleModule> RoleModules { get; set; }
     }
 }
