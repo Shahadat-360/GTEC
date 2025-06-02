@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
-using MiniAccountManagementSystem.Web.Helper;
 
 public class AssignModuleModel : PageModel
 {
