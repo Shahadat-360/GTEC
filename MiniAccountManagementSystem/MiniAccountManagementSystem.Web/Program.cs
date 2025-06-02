@@ -48,6 +48,15 @@ try
         options.User.RequireUniqueEmail = true;
     }).AddEntityFrameworkStores<ApplicationDbContext>()
       .AddDefaultTokenProviders();
+
+
+    // Add this configuration
+    builder.Services.ConfigureApplicationCookie(options =>
+    {
+        options.LoginPath = "/Identity/Account/Login";
+        options.LogoutPath = "/Identity/Account/Logout";
+        options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+    });
     #endregion
 
     //Dummy EmailService Added
@@ -87,6 +96,7 @@ try
 
     app.UseRouting();
 
+    app.UseAuthentication();
     app.UseAuthorization();
 
     app.MapStaticAssets();

@@ -2,7 +2,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
+using Microsoft.AspNetCore.Authorization;
 
+
+[Authorize(Roles = "Admin")]
 public class AssignModuleModel : PageModel
 {
     private readonly IConfiguration _configuration;
@@ -54,6 +57,7 @@ public class AssignModuleModel : PageModel
         await OnGetAsync();
         return Page();
     }
+
     private async Task RunStoredProcedure(string procedureName)
     {
         using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));

@@ -1,5 +1,5 @@
 ﻿@page
-@using MiniAccountManagementSystem.Web.Pages.ManageUsers
+@using MiniAccountManagementSystem.Web.Pages.ManageModules
 @model IndexModuleModel
 @{
     ViewData["Title"] = "Module Assignments";
@@ -18,7 +18,7 @@
                     <p class="text-muted mb-0">Overview of all role-module assignments in the system</p>
                 </div>
                 <div>
-                    <a href="/ManageUsers/AssignModule" class="btn btn-primary btn-lg">
+                    <a href="/ManageModules/AssignModule" class="btn btn-primary btn-lg">
                         <i class="bi bi-plus-circle me-2"></i>
                         Assign Module
                     </a>
@@ -152,7 +152,7 @@
                                     <span>There are currently no module assignments in the system.</span>
                                 }
                             </p>
-                            <a href="/ManageUsers/AssignModule" class="btn btn-primary">
+                            <a href="/ManageModules/AssignModule" class="btn btn-primary">
                                 <i class="bi bi-plus-circle me-2"></i>
                                 Create First Assignment
                             </a>

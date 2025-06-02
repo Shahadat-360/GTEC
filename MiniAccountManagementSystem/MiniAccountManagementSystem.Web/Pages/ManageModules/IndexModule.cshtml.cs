@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using MiniAccountManagementSystem.Web.Data;
 using System.Data;
 
-namespace MiniAccountManagementSystem.Web.Pages.ManageUsers
+namespace MiniAccountManagementSystem.Web.Pages.ManageModules
 {
     public class IndexModuleModel(ApplicationDbContext context) : PageModel
     {
