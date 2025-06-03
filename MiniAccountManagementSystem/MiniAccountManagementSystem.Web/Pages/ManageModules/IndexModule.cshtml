@@ -1,0 +1,212 @@
+﻿@page
+@using MiniAccountManagementSystem.Web.Pages.ManageModules
+@model IndexModuleModel
+@{
+    ViewData["Title"] = "Module Assignments";
+}
+
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-12">
+            <!-- Header Section -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="display-6 fw-bold text-primary mb-2">
+                        <i class="bi bi-list-check me-2"></i>
+                        Module Assignments
+                    </h1>
+                    <p class="text-muted mb-0">Overview of all role-module assignments in the system</p>
+                </div>
+                <div>
+                    <a href="/ManageModules/AssignModule" class="btn btn-primary btn-lg">
+                        <i class="bi bi-plus-circle me-2"></i>
+                        Assign Module
+                    </a>
+                </div>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="card bg-primary text-white h-100">
+                        <div class="card-body text-center">
+                            <i class="bi bi-people-fill display-4 mb-2"></i>
+                            <h3 class="mb-1">@Model.TotalRoles</h3>
+                            <p class="mb-0">Total Roles</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="card bg-success text-white h-100">
+                        <div class="card-body text-center">
+                            <i class="bi bi-puzzle-fill display-4 mb-2"></i>
+                            <h3 class="mb-1">@Model.TotalModules</h3>
+                            <p class="mb-0">Total Modules</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="card bg-info text-white h-100">
+                        <div class="card-body text-center">
+                            <i class="bi bi-link-45deg display-4 mb-2"></i>
+                            <h3 class="mb-1">@Model.TotalAssignments</h3>
+                            <p class="mb-0">Active Assignments</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="card bg-warning text-white h-100">
+                        <div class="card-body text-center">
+                            <i class="bi bi-shield-check display-4 mb-2"></i>
+                            <h3 class="mb-1">@Model.RolesWithModules</h3>
+                            <p class="mb-0">Roles with Access</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assignments Table -->
+            <div class="card shadow">
+                <div class="card-header bg-light">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-table me-2"></i>
+                        Module Assignments
+                        @if (Model.RoleModuleAssignments.Any())
+                        {
+                            <span class="badge bg-primary ms-2">@Model.RoleModuleAssignments.Count() items</span>
+                        }
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    @if (Model.RoleModuleAssignments.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">
+                                            <i class="bi bi-hash me-1"></i>
+                                            #
+                                        </th>
+                                        <th scope="col">
+                                            <i class="bi bi-people me-1"></i>
+                                            Role Name
+                                        </th>
+                                        <th scope="col">
+                                            <i class="bi bi-puzzle me-1"></i>
+                                            Module Name
+                                        </th>
+                                        <th scope="col">
+                                            <i class="bi bi-calendar me-1"></i>
+                                            Assigned Date
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{int counter = 1;}
+                                    @foreach (var assignment in Model.RoleModuleAssignments)
+                                    {
+                                        <tr>
+                                            <td class="fw-semibold text-muted">@counter</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="badge bg-primary me-2">
+                                                        <i class="bi bi-person-badge"></i>
+                                                    </span>
+                                                    <strong>@assignment.RoleName</strong>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="badge bg-success me-2">
+                                                        <i class="bi bi-puzzle-fill"></i>
+                                                    </span>
+                                                    @assignment.ModuleName
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">
+                                                    <i class="bi bi-clock me-1"></i>
+                                                    @(assignment.AssignedDate?.ToString("MMM dd, yyyy") ?? "N/A")
+                                                </small>
+                                            </td>
+                                        </tr>
+                                        counter++;
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="bi bi-inbox display-1 text-muted mb-3"></i>
+                            <h4 class="text-muted">No Assignments Found</h4>
+                            <p class="text-muted mb-4">
+                                @if (!string.IsNullOrEmpty(Model.SelectedRoleFilter) || !string.IsNullOrEmpty(Model.SelectedModuleFilter))
+                                {
+                                    <span>No assignments match your current filters.</span>
+                                }
+                                else
+                                {
+                                    <span>There are currently no module assignments in the system.</span>
+                                }
+                            </p>
+                            <a href="/ManageModules/AssignModule" class="btn btn-primary">
+                                <i class="bi bi-plus-circle me-2"></i>
+                                Create First Assignment
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Summary by Role -->
+            @if (Model.RoleModuleAssignments.Any())
+            {
+                <div class="card mt-4 mb-5">
+                    <div class="card-header bg-light">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-pie-chart me-2"></i>
+                            Summary by Role
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            @foreach (var roleGroup in Model.RoleModuleAssignments.GroupBy(x => x.RoleName))
+                            {
+                                <div class="col-md-6 col-lg-4 mb-3">
+                                    <div class="border rounded p-3 h-100">
+                                        <h6 class="fw-bold text-primary mb-2">
+                                            <i class="bi bi-person-badge me-1"></i>
+                                            @roleGroup.Key
+                                        </h6>
+                                        <p class="text-muted small mb-2">
+                                            <i class="bi bi-puzzle me-1"></i>
+                                            @roleGroup.Count() module(s) assigned
+                                        </p>
+                                        <div class="d-flex flex-wrap gap-1">
+                                            @foreach (var module in roleGroup.Take(3))
+                                            {
+                                                <span class="badge bg-success">@module.ModuleName</span>
+                                            }
+                                            @if (roleGroup.Count() > 3)
+                                            {
+                                                <span class="badge bg-secondary">+@(roleGroup.Count() - 3) more</span>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+}

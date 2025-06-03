@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MiniAccountManagementSystem.Web.Data;
 
@@ -11,9 +12,11 @@ using MiniAccountManagementSystem.Web.Data;
 namespace MiniAccountManagementSystem.Web.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250601125209_ModulesTable")]
+    partial class ModulesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,10 +170,12 @@ namespace MiniAccountManagementSystem.Web.Data.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -207,10 +212,12 @@ namespace MiniAccountManagementSystem.Web.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -218,54 +225,6 @@ namespace MiniAccountManagementSystem.Web.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("MiniAccountManagementSystem.Web.Entities.ChartOfAccount", b =>
-                {
-                    b.Property<int>("AccountId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AccountId"));
-
-                    b.Property<string>("AccountCode")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("AccountName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("AccountType")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("ParentAccountId")
-                        .HasColumnType("int");
-
-                    b.HasKey("AccountId");
-
-                    b.HasIndex("AccountCode")
-                        .IsUnique();
-
-                    b.HasIndex("ParentAccountId");
-
-                    b.ToTable("ChartOfAccounts", (string)null);
                 });
 
             modelBuilder.Entity("MiniAccountManagementSystem.Web.Entities.Module", b =>
@@ -287,34 +246,6 @@ namespace MiniAccountManagementSystem.Web.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Modules", (string)null);
-                });
-
-            modelBuilder.Entity("MiniAccountManagementSystem.Web.Entities.RoleModule", b =>
-                {
-                    b.Property<int>("RoleModuleId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoleModuleId"));
-
-                    b.Property<DateTime>("AssignedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ModuleId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("RoleModuleId");
-
-                    b.HasIndex("ModuleId");
-
-                    b.HasIndex("RoleId", "ModuleId")
-                        .IsUnique();
-
-                    b.ToTable("RoleModules", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -366,45 +297,6 @@ namespace MiniAccountManagementSystem.Web.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("MiniAccountManagementSystem.Web.Entities.ChartOfAccount", b =>
-                {
-                    b.HasOne("MiniAccountManagementSystem.Web.Entities.ChartOfAccount", "ParentAccount")
-                        .WithMany("ChildAccounts")
-                        .HasForeignKey("ParentAccountId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("ParentAccount");
-                });
-
-            modelBuilder.Entity("MiniAccountManagementSystem.Web.Entities.RoleModule", b =>
-                {
-                    b.HasOne("MiniAccountManagementSystem.Web.Entities.Module", "Module")
-                        .WithMany("RoleModules")
-                        .HasForeignKey("ModuleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Module");
-
-                    b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("MiniAccountManagementSystem.Web.Entities.ChartOfAccount", b =>
-                {
-                    b.Navigation("ChildAccounts");
-                });
-
-            modelBuilder.Entity("MiniAccountManagementSystem.Web.Entities.Module", b =>
-                {
-                    b.Navigation("RoleModules");
                 });
 #pragma warning restore 612, 618
         }
