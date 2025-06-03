@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -61,6 +62,11 @@ try
 
     //Dummy EmailService Added
     builder.Services.AddTransient<IEmailSender, EmailSender>();
+
+    // Register module authorization services
+    builder.Services.AddScoped<IModuleAuthorizationService, ModuleAuthorizationService>();
+    builder.Services.AddScoped<IAuthorizationHandler, ModuleAuthorizationHandler>();
+    builder.Services.AddSingleton<IAuthorizationPolicyProvider, ModuleAuthorizationPolicyProvider>();
 
     builder.Services.AddRazorPages();
 

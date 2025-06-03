@@ -3,10 +3,13 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Authorization;
+using MiniAccountManagementSystem.Web.Services;
 
 
-[Authorize(Roles = "Admin")]
-public class AssignModuleModel : PageModel
+namespace MiniAccountManagementSystem.Web.Pages.ManageModules
+{
+    [Authorize(Roles = "Admin")]
+    public class AssignModuleModel : PageModel
 {
     private readonly IConfiguration _configuration;
     private readonly RoleManager<IdentityRole> _roleManager;
@@ -70,5 +73,6 @@ public class AssignModuleModel : PageModel
         cmd.Parameters.AddWithValue("@RoleName", SelectedRole);
         cmd.Parameters.AddWithValue("@ModuleName", SelectedModule);
         await cmd.ExecuteNonQueryAsync();
+    }
     }
 }
