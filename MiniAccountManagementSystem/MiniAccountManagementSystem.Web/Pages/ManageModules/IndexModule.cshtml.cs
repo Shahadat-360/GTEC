@@ -4,9 +4,12 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MiniAccountManagementSystem.Web.Data;
 using System.Data;
+using Microsoft.AspNetCore.Authorization;
+using MiniAccountManagementSystem.Web.Services;
 
-namespace MiniAccountManagementSystem.Web.Pages.ManageUsers
+namespace MiniAccountManagementSystem.Web.Pages.ManageModules
 {
+    [Authorize(Roles = "Admin")]
     public class IndexModuleModel(ApplicationDbContext context) : PageModel
     {
         private readonly ApplicationDbContext _context = context;

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -48,10 +49,24 @@ try
         options.User.RequireUniqueEmail = true;
     }).AddEntityFrameworkStores<ApplicationDbContext>()
       .AddDefaultTokenProviders();
+
+
+    // Add this configuration
+    builder.Services.ConfigureApplicationCookie(options =>
+    {
+        options.LoginPath = "/Identity/Account/Login";
+        options.LogoutPath = "/Identity/Account/Logout";
+        options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+    });
     #endregion
 
     //Dummy EmailService Added
     builder.Services.AddTransient<IEmailSender, EmailSender>();
+
+    // Register module authorization services
+    builder.Services.AddScoped<IModuleAuthorizationService, ModuleAuthorizationService>();
+    builder.Services.AddScoped<IAuthorizationHandler, ModuleAuthorizationHandler>();
+    builder.Services.AddSingleton<IAuthorizationPolicyProvider, ModuleAuthorizationPolicyProvider>();
 
     builder.Services.AddRazorPages();
 
@@ -87,6 +102,7 @@ try
 
     app.UseRouting();
 
+    app.UseAuthentication();
     app.UseAuthorization();
 
     app.MapStaticAssets();
