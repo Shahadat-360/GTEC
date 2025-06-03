@@ -27,4 +27,8 @@
     <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="8.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\ChartOfAccounts\Models\" />
+  </ItemGroup>
+
 </Project>

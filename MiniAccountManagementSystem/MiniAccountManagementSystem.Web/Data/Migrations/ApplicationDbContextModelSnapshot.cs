@@ -220,6 +220,54 @@ namespace MiniAccountManagementSystem.Web.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("MiniAccountManagementSystem.Web.Entities.ChartOfAccount", b =>
+                {
+                    b.Property<int>("AccountId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AccountId"));
+
+                    b.Property<string>("AccountCode")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("AccountName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("AccountType")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ParentAccountId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AccountId");
+
+                    b.HasIndex("AccountCode")
+                        .IsUnique();
+
+                    b.HasIndex("ParentAccountId");
+
+                    b.ToTable("ChartOfAccounts", (string)null);
+                });
+
             modelBuilder.Entity("MiniAccountManagementSystem.Web.Entities.Module", b =>
                 {
                     b.Property<int>("ModuleId")
@@ -320,6 +368,16 @@ namespace MiniAccountManagementSystem.Web.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("MiniAccountManagementSystem.Web.Entities.ChartOfAccount", b =>
+                {
+                    b.HasOne("MiniAccountManagementSystem.Web.Entities.ChartOfAccount", "ParentAccount")
+                        .WithMany("ChildAccounts")
+                        .HasForeignKey("ParentAccountId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("ParentAccount");
+                });
+
             modelBuilder.Entity("MiniAccountManagementSystem.Web.Entities.RoleModule", b =>
                 {
                     b.HasOne("MiniAccountManagementSystem.Web.Entities.Module", "Module")
@@ -337,6 +395,11 @@ namespace MiniAccountManagementSystem.Web.Data.Migrations
                     b.Navigation("Module");
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("MiniAccountManagementSystem.Web.Entities.ChartOfAccount", b =>
+                {
+                    b.Navigation("ChildAccounts");
                 });
 
             modelBuilder.Entity("MiniAccountManagementSystem.Web.Entities.Module", b =>

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MiniAccountManagementSystem.Web.Entities;
 
@@ -10,6 +10,8 @@ namespace MiniAccountManagementSystem.Web.Data
             : base(options)
         {
         }
+
+        public DbSet<ChartOfAccount> ChartOfAccounts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -43,6 +45,25 @@ namespace MiniAccountManagementSystem.Web.Data
                 .WithMany(m => m.RoleModules)
                 .HasForeignKey(rm => rm.ModuleId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // Configure ChartOfAccount entity
+            builder.Entity<ChartOfAccount>(
+                entity =>
+                {
+                    entity.ToTable("ChartOfAccounts");
+                    entity.HasKey(c => c.AccountId);
+                    entity.Property(c => c.AccountCode).IsRequired().HasMaxLength(20);
+                    entity.Property(c => c.AccountName).IsRequired().HasMaxLength(100);
+                    entity.Property(c => c.Description).HasMaxLength(500);
+                    entity.HasIndex(c => c.AccountCode).IsUnique();
+                    
+                    // Self-referencing relationship for parent-child accounts
+                    entity.HasOne(c => c.ParentAccount)
+                          .WithMany(c => c.ChildAccounts)
+                          .HasForeignKey(c => c.ParentAccountId)
+                          .IsRequired(false)
+                          .OnDelete(DeleteBehavior.Restrict);
+                });
 
             base.OnModelCreating(builder);
         }
