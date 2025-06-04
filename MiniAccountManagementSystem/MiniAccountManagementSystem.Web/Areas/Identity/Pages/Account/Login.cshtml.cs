@@ -110,7 +110,6 @@ namespace MiniAccountManagementSystem.Web.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     var user = await _userManager.FindByEmailAsync(Input.Email);
-                    await _userManager.AddToRoleAsync(user, "Admin");
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }
